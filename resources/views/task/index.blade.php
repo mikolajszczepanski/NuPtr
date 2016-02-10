@@ -22,7 +22,11 @@
                 {{$task->author}}
             </td>
             <td>
-                <p>{{$task->description}}</p>
+                <p>{{$task->description}}
+                    @foreach ($task->files as $file)
+                    <a href="{{action('TaskController@viewTaskFile',[$file->id])}}">{{$file->name}}</a>
+                    @endforeach
+                </p>
                 <div class="hidden">
                     <table>
                         <thead>
@@ -40,7 +44,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <a href="#">[add new solution]</a>
+                    <a href="{{action('SolutionController@getCreateView',[$task->id])}}">[add new solution]</a>
                 </div>
             </td>
             <td>{{$task->created_at}}</td>

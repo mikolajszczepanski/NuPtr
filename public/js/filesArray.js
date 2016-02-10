@@ -14,7 +14,7 @@ $(function(){
             '<input type="text" name="files[{{NUMBER}}][name]" class="form-control" id="file_name{{NUMBER}}" placeholder="Name of file {{NUMBER}}">' +
             '</div><div class="form-group">' +
             '<label for="file_content{{NUMBER}}">Content</label>' +
-            '<textarea class="form-control" name="files[{{NUMBER}}][content]" id="file_content{{NUMBER}}" rows="3"></textarea>' +
+            '<textarea class="form-control" name="files[{{NUMBER}}][content]" id="file_content{{NUMBER}}" rows="6"></textarea>' +
             '</div>' +
             '</div>';
     
@@ -30,8 +30,8 @@ $(function(){
        if(numFiles>0){
             $('div#file' + numFiles.toString()).html('');
             numFiles--;
-            event.preventDefault();
         }
+        event.preventDefault();
    });
    
    

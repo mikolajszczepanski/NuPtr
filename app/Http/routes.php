@@ -38,6 +38,10 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@getCreateView']);
     Route::post('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@create']);
+    Route::get('tasks/file/{id}', ['middleware' => 'auth', 'uses' => 'TaskController@viewTaskFile']);
     
+    Route::get('solution/create/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getCreateView']);
+     Route::post('solution/create', ['middleware' => 'auth', 'uses' => 'SolutionController@create']);
+     
     Route::get('/home', 'HomeController@index');
 });

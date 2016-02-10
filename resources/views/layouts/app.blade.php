@@ -45,7 +45,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    NullPointer
                 </a>
             </div>
 
@@ -57,7 +57,7 @@
                 </ul>
                 
                 <!-- Search -->
-                <div class="col-sm-offset-0 col-md-offset-1 col-lg-offset-2 col-sm-4 col-md-5 col-lg-6 pull-left">
+                <div class="col-sm-offset-0 col-md-offset-1 col-lg-offset-1 col-sm-5 col-md-5 col-lg-6 pull-left">
                     <form class="navbar-form" role="search">
                         <div id="search" class="input-group">
                                 <input type="text" class="form-control" placeholder="Search" name="" id="">
@@ -90,8 +90,16 @@
         </div>
     </nav>
 
-    <div style="margin-top:50px">
+    <div id="main-content">
+        @if(Session::has('alert'))
+        <p id="alert-message" 
+           class="alert {{ Session::get('alert')->class }} col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+            <strong>{{ Session::get('alert')->title }}</strong> {{ Session::get('alert')->text }}
+        </p>
+        @endif
+        
         @yield('content')
+        
     </div>
 
     
