@@ -11,18 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    
-    
-    return view('welcome');
-});
 
-Route::get('order', 'order@index');
-
-Route::get('users', function(){
-	
-    return 'Users!';
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -36,11 +25,19 @@ Route::get('users', function(){
 */
 
 Route::group(['middleware' => ['web']], function () {
-    //
+    Route::get('/', function () {
+        return view('welcome');
+    });
+
+    Route::get('tasks', 'TaskController@index');
+
 });
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
 
+    Route::get('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@getCreateView']);
+    Route::post('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@create']);
+    
     Route::get('/home', 'HomeController@index');
 });

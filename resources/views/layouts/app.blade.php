@@ -14,19 +14,24 @@
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/default.css') }}" />
+    
+    <!-- JavaScripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
 
-    <style>
-        body {
-            font-family: 'Lato';
-        }
-
-        .fa-btn {
-            margin-right: 6px;
-        }
-    </style>
+    <!-- Cookies -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.cookiebar.css') }}" />
+    <script type="text/javascript" src="{{ asset('js/jquery.cookiebar.js') }}"></script>
+    
+    
+    <!-- Default -->
+    <script type="text/javascript" src="{{ asset('js/default.js') }}"></script>
+    
 </head>
 <body id="app-layout">
-    <nav class="navbar navbar-default">
+    <nav id="navbar" class="navbar navbar-default">
         <div class="container">
             <div class="navbar-header">
 
@@ -48,8 +53,21 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url('/home') }}">Home</a></li>
+                    <li><a href="{{ url('/tasks') }}">Tasks</a></li>
                 </ul>
-
+                
+                <!-- Search -->
+                <div class="col-sm-offset-0 col-md-offset-1 col-lg-offset-2 col-sm-4 col-md-5 col-lg-6 pull-left">
+                    <form class="navbar-form" role="search">
+                        <div id="search" class="input-group">
+                                <input type="text" class="form-control" placeholder="Search" name="" id="">
+                                <div class="input-group-btn">
+                                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                        </div>
+                    </form>
+                </div>
+                    
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->
@@ -72,11 +90,10 @@
         </div>
     </nav>
 
-    @yield('content')
+    <div style="margin-top:50px">
+        @yield('content')
+    </div>
 
-    <!-- JavaScripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+    
 </body>
 </html>
