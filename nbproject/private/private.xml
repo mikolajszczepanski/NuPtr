@@ -5,12 +5,11 @@
         <group>
             <file>file:/C:/xampp/htdocs/tasks/resources/views/task/create.blade.php</file>
             <file>file:/C:/xampp/htdocs/tasks/resources/views/layouts/app.blade.php</file>
-            <file>file:/C:/xampp/htdocs/tasks/app/Http/Controllers/TaskController.php</file>
+            <file>file:/C:/xampp/htdocs/tasks/resources/views/task/taskfile.blade.php</file>
             <file>file:/C:/xampp/htdocs/tasks/resources/views/task/index.blade.php</file>
+            <file>file:/C:/xampp/htdocs/tasks/resources/views/solution/create.blade.php</file>
             <file>file:/C:/xampp/htdocs/tasks/app/Http/routes.php</file>
-            <file>file:/C:/xampp/htdocs/tasks/resources/views/test.blade.php</file>
-            <file>file:/C:/xampp/htdocs/tasks/resources/views/welcome.blade.php</file>
-            <file>file:/C:/xampp/htdocs/tasks/public/js/clickableTableRow.js</file>
+            <file>file:/C:/xampp/htdocs/tasks/app/Http/Controllers/HomeController.php</file>
         </group>
     </open-files>
 </project-private>

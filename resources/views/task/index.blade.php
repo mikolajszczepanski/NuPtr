@@ -37,11 +37,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($task->solutions as $solution)
                             <tr>
-                                <td>Jakiś ktoś</td>
-                                <td><a href="google.pl">main.cpp</a> object.cpp object.h make array.cpp array.h</td>
-                                <td>2016-01-01 12:12:32</td>
+                                <td>{{$solution->user_name}}</td>
+                                <td>
+                                    @foreach ($solution->files as $file)
+                                        <a href="{{action('SolutionController@viewSolutionFile',[$solution->id])}}">{{$file->name}}</a>
+                                    @endforeach
+                                </td>
+                                <td>{{$solution->created_at}}</td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                     <a href="{{action('SolutionController@getCreateView',[$task->id])}}">[add new solution]</a>
@@ -54,6 +60,6 @@
     </table>
     {!! $tasks->render() !!}
 
-    <script src="{{ asset('js/tasksIndex.js') }}"></script>
+    <script src="{{ asset('public/js/tasksIndex.js') }}"></script>
 </div>
 @endsection

@@ -13,21 +13,21 @@
 
     <!-- Styles -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/default.css') }}" />
+    {{-- <link href="{{ elixir('public/css/app.css') }}" rel="stylesheet"> --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/css/default.css') }}" />
     
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    {{-- <script src="{{ elixir('js/app.js') }}"></script> --}}
+    {{-- <script src="{{ elixir('public/js/app.js') }}"></script> --}}
 
     <!-- Cookies -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/jquery.cookiebar.css') }}" />
-    <script type="text/javascript" src="{{ asset('js/jquery.cookiebar.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('public/css/jquery.cookiebar.css') }}" />
+    <script type="text/javascript" src="{{ asset('public/js/jquery.cookiebar.js') }}"></script>
     
     
     <!-- Default -->
-    <script type="text/javascript" src="{{ asset('js/default.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/js/default.js') }}"></script>
     
 </head>
 <body id="app-layout">
@@ -52,8 +52,16 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/home') }}">Home</a></li>
-                    <li><a href="{{ url('/tasks') }}">Tasks</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            Tasks <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="{{ url('/tasks') }}">All</a></li>
+                           
+                        </ul>
+                    </li>
+                    <li><a href="{{ url('/contact') }}">Contact</a></li>
                 </ul>
                 
                 <!-- Search -->
@@ -81,6 +89,9 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
+                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-user"></i>My account</a></li>
+                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-star"></i>View my tasks</a></li>
+                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-star"></i>View my solutions</a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
@@ -102,6 +113,12 @@
         
     </div>
 
+    <div>
+        <hr>
+        <div class="col-lg-2 col-lg-offset-5">
+        All right reserved
+        </div>
+    </div>
     
 </body>
 </html>

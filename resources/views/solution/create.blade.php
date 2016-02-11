@@ -15,11 +15,7 @@
     @endif
     <form method="post" action="{{action('SolutionController@create')}}">
       <input type="hidden" name="_token" value="{{ csrf_token() }}">
-      <input type="hidden" name="id" value="{{ $id }}">
-      <div class="form-group">
-        <label for="author">Author</label>
-        <input type="text" class="form-control" id="author" name="author" placeholder="Author">
-      </div>
+      <input type="hidden" name="task_id" value="{{ $id }}">
       <div class="form-group">
           <label>Files</label>
       </div>
@@ -33,6 +29,6 @@
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
 </div>
-<script src="{{ URL::asset('js/filesArray.js') }}"></script>
+<script src="{{ URL::asset('public/js/filesArray.js') }}"></script>
 
 @endsection

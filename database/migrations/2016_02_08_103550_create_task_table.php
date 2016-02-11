@@ -12,13 +12,17 @@ class CreateTaskTable extends Migration
      */
     public function up()
     {
+               
+        
         Schema::create('tasks',function(Blueprint $table){
             $table->increments('id');
             $table->string('name',60);
             $table->string('author',60);
             $table->string('description',500)->nullable();
-            $table->string('category',20)->nullable();
-            $table->bigInteger('user_id');
+            $table->integer('category_id')->unsigned();
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -31,5 +35,6 @@ class CreateTaskTable extends Migration
     public function down()
     {
         Schema::drop('tasks');
+        
     }
 }

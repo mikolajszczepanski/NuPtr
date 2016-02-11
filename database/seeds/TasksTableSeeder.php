@@ -14,7 +14,7 @@ class TasksTableSeeder extends Seeder
     {
        for($i = 0; $i < 10; $i++){ 
         $j = rand(0,1000);
-        Task::create(['author' => 'Testowy Autor '.$j, 'name' => 'Testowe Zadanie '.$j]); 
+        Task::create(['author' => 'Testowy Autor '.$j, 'name' => 'Testowe Zadanie '.$j, 'category_id' => 1,'user_id' => 1]); 
        }
     }
 }

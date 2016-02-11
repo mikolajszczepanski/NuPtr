@@ -29,8 +29,10 @@
       </div>
       <div class="form-group">
         <label for="category">Category</label>
-        <select id="category" class="form-control" name="category">
-            <option value="cpp">C++</option>
+        <select id="category" class="form-control" name="category_id">
+            @foreach($categories as $category)
+                <option value="{{$category->id}}">{{$category->name}}</option>
+            @endforeach
         </select>
       </div>
       <div class="form-group">
@@ -46,6 +48,6 @@
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
 </div>
-<script src="{{ URL::asset('js/filesArray.js') }}"></script>
+<script src="{{ URL::asset('public/js/filesArray.js') }}"></script>
 
 @endsection

@@ -16,8 +16,10 @@ class CreateFilesTables extends Migration
             $table->increments('id');
             $table->string('name',60);
             $table->text('data');
-            $table->bigInteger('user_id');
-            $table->bigInteger('solution_id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('solution_id')->unsigned();
+            $table->foreign('solution_id')->references('id')->on('solutions');
             $table->timestamps();
         });
         
@@ -25,8 +27,10 @@ class CreateFilesTables extends Migration
             $table->increments('id');
             $table->string('name',60);
             $table->text('data');
-            $table->bigInteger('user_id');
-            $table->bigInteger('task_id');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->integer('task_id')->unsigned();
+            $table->foreign('task_id')->references('id')->on('tasks');
             $table->timestamps();
         });
     }

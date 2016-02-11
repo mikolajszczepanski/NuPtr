@@ -11,7 +11,11 @@ use App;
 use App\Task;
 use App\TaskFile;
 use App\Alert;
-use Session;
+use App\Category;
+use App\Solution;
+use App\SolutionFile;
+use App\User;
+use DB;
 
 class TaskController extends Controller
 {
@@ -22,13 +26,30 @@ class TaskController extends Controller
         
         foreach($tasks as $task){
             $task->files = TaskFile::where('task_id','=',$task->id)->get();
+                        
+            $solutions = DB::table('solutions')
+                    ->join('users','solutions.user_id','=','users.id')
+                    ->where('solutions.task_id',$task->id)
+                    ->select(array('users.id',
+                                   'solutions.id',
+                                   'users.name AS user_name',
+                                   'solutions.created_at'))
+                    ->get();
+            
+            foreach($solutions as $solution){
+                $solution->files = SolutionFile::where('solution_id',$solution->id)->get();
+            }
+            $task->solutions = $solutions;
         }
+          
         return view('task/index',['tasks' => $tasks]);
     }
     
     public function getCreateView(){
-
-        return view('task/create');
+        
+        $categories = Category::all();
+        
+        return view('task/create',['categories' => $categories]);
     }
     
     public function viewTask($id = null){
@@ -43,7 +64,7 @@ class TaskController extends Controller
             App::abort(404);
         }
         
-        return view('task/taskfile',['taskFile' => $taskFile]);
+        return view('task/file',['taskFile' => $taskFile]);
         
     }
     
@@ -55,21 +76,24 @@ class TaskController extends Controller
             'name' => 'required|max:60|min:4',
             'author' => 'required|max:60|min:4',
             'description' => 'max:500',
-            'category' => 'max:20',
+            'category_id' => 'required|numeric',
             'files.*.name' => 'required|min:2|max:60',
             'files.*.content' => 'required|min:2|max:1000000',
         ]);
-        
+        $category = Category::where('id',$request->input('category_id'))->first();
+        if(!$category){
+            App::abort(406);
+        }
         
         $task = new Task;
         
         $task->name = $request->input('name');
         $task->author = $request->input('author');
         $task->description = $request->input('description');
-        $task->category = $request->input('category');
+        $task->category_id = $request->input('category_id');
         $task->user_id = $request->user()->id;
         $filesArray = $request->input('files');
-
+        
         $pass = $task->save();
       
         if(is_array($filesArray)){

@@ -25,11 +25,10 @@
 */
 
 Route::group(['middleware' => ['web']], function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
-
-    Route::get('tasks', 'TaskController@index');
+    Route::get('/', 'HomeController@index');
+    Route::get('/contact', 'HomeController@contact');
+    
+    Route::get('/tasks', 'TaskController@index');
 
 });
 
@@ -38,10 +37,11 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@getCreateView']);
     Route::post('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@create']);
-    Route::get('tasks/file/{id}', ['middleware' => 'auth', 'uses' => 'TaskController@viewTaskFile']);
+    Route::get('tasks/file/{id}', 'TaskController@viewTaskFile');
     
     Route::get('solution/create/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getCreateView']);
-     Route::post('solution/create', ['middleware' => 'auth', 'uses' => 'SolutionController@create']);
-     
+    Route::post('solution/create', ['middleware' => 'auth', 'uses' => 'SolutionController@create']);
+    Route::get('solution/file/{id}', 'SolutionController@viewSolutionFile');
+    
     Route::get('/home', 'HomeController@index');
 });
