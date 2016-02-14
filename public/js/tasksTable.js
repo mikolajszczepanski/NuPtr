@@ -8,10 +8,10 @@ $(function(){
     
     $('.clickableRow').css('cursor','pointer');
     $('.clickableRow').mouseover(function(){
-       $(this).addClass('success');
+       $(this).addClass('selected-row');
     });
     $('.clickableRow').mouseout(function(){
-       $(this).removeClass('success');
+       $(this).removeClass('selected-row');
     });
     $('.clickableRow').click(function(event){
        $(this).find('div').toggleClass('hidden');

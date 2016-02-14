@@ -5,7 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>NuPtr</title>
+    <link rel="shortcut icon" href="{{ asset('public/favicon.ico') }}">
+    
+    <meta name="description" content="Tasks and solutions online repertory">
+    <meta name="keywords" content="tasks,programming,code,problems,solutions">
 
     <!-- Fonts -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
@@ -45,7 +49,7 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    NullPointer
+                    NuPtr
                 </a>
             </div>
 
@@ -89,9 +93,9 @@
                             </a>
 
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-user"></i>My account</a></li>
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-star"></i>View my tasks</a></li>
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-star"></i>View my solutions</a></li>
+                                <li><a href="{{ url('/account') }}"><i class="fa fa-btn fa-user"></i>My account</a></li>
+                                <li><a href="{{ url('/my/tasks') }}"><i class="fa fa-btn fa-star"></i>View my tasks</a></li>
+                                <li><a href="{{ url('/my/solutions') }}"><i class="fa fa-btn fa-star"></i>View my solutions</a></li>
                                 <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
                             </ul>
                         </li>
@@ -101,22 +105,27 @@
         </div>
     </nav>
 
-    <div id="main-content">
+    <div id="main-content" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
         @if(Session::has('alert'))
-        <p id="alert-message" 
-           class="alert {{ Session::get('alert')->class }} col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
-            <strong>{{ Session::get('alert')->title }}</strong> {{ Session::get('alert')->text }}
-        </p>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+            <p id="alert-message" 
+               class="alert {{ Session::get('alert')->class }} col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+                <strong>{{ Session::get('alert')->title }}</strong> {{ Session::get('alert')->text }}
+            </p>
+        </div>
         @endif
-        
+        <div class="container">
         @yield('content')
-        
+        </div>
     </div>
 
     <div>
         <hr>
-        <div class="col-lg-2 col-lg-offset-5">
-        All right reserved
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+            <br>
+            <p class="text-center">
+                All right reserved
+            </p>
         </div>
     </div>
     

@@ -12,6 +12,30 @@ body {
     margin-top:60px;
 }
 
+.data-row{
+    border: 1px solid #eee;
+    border-left-color: #1b809e !important;
+    padding: 10px;
+    margin: 10px;
+}
+
+
+.table > thead > tr > td.selected-row,
+.table > tbody > tr > td.selected-row,
+.table > tfoot > tr > td.selected-row,
+.table > thead > tr > th.selected-row,
+.table > tbody > tr > th.selected-row,
+.table > tfoot > tr > th.selected-row,
+.table > thead > tr.selected-row > td,
+.table > tbody > tr.selected-row > td,
+.table > tfoot > tr.selected-row > td,
+.table > thead > tr.selected-row > th,
+.table > tbody > tr.selected-row > th,
+.table > tfoot > tr.selected-row > th {
+  background-color: #ECEFF1;
+}
+
+
 /* MENU */
 
 #navbar{

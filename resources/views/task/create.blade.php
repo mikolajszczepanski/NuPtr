@@ -14,18 +14,19 @@
         </div>
     @endif
     <form method="post" action="{{action('TaskController@create')}}">
+      <input type="hidden" name="task_id" value="{{ $task ? $task->id : '' }}">
       <input type="hidden" name="_token" value="{{ csrf_token() }}">
       <div class="form-group">
         <label for="taskName">Name</label>
-        <input type="text" class="form-control" id="taskName" name="name" placeholder="Name of task">
+        <input type="text" value="{{ $task ? $task->name : '' }}" class="form-control" id="taskName" name="name" placeholder="Name of task">
       </div>
       <div class="form-group">
         <label for="author">Author</label>
-        <input type="text" class="form-control" id="author" name="author" placeholder="Author">
+        <input type="text" value="{{ $task ? $task->author : '' }}" class="form-control" id="author" name="author" placeholder="Author">
       </div>
       <div class="form-group">
         <label for="description">Description</label>
-        <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+        <input type="text" value="{{ $task ? $task->description : '' }}" class="form-control" id="description" name="description" placeholder="Description">
       </div>
       <div class="form-group">
         <label for="category">Category</label>

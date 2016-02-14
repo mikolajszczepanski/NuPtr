@@ -34,6 +34,13 @@ $(function(){
         domain: 'www.example.com',
         referrer: 'www.example.com'
     });
+    
+    
+    $('.divAsLink').css('cursor','pointer');
+    $('.divAsLink').click(function(){
+        var href = $(this).attr('href');
+        window.location = href;
+    });
 
     
 });

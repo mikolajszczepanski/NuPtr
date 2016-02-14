@@ -16,40 +16,54 @@ use App\Solution;
 use App\SolutionFile;
 use App\User;
 use DB;
+use Auth;
 
 class TaskController extends Controller
 {
 
     public function index($paginate = 15){
         
-        $tasks = Task::orderBy('created_at','desc')->paginate($paginate);
-        
-        foreach($tasks as $task){
-            $task->files = TaskFile::where('task_id','=',$task->id)->get();
-                        
-            $solutions = DB::table('solutions')
-                    ->join('users','solutions.user_id','=','users.id')
-                    ->where('solutions.task_id',$task->id)
-                    ->select(array('users.id',
-                                   'solutions.id',
-                                   'users.name AS user_name',
-                                   'solutions.created_at'))
-                    ->get();
-            
-            foreach($solutions as $solution){
-                $solution->files = SolutionFile::where('solution_id',$solution->id)->get();
-            }
-            $task->solutions = $solutions;
-        }
+        $tasks = Task::where('deleted',false)
+                ->orderBy('created_at','desc')
+                ->paginate($paginate);
+         
+        Task::resolveTasksDependencies($tasks);
           
         return view('task/index',['tasks' => $tasks]);
     }
     
-    public function getCreateView(){
+    
+
+
+    public function getCreateView($task_id = null){
         
         $categories = Category::all();
         
-        return view('task/create',['categories' => $categories]);
+        return view('task/create',
+                [
+                    'categories' => $categories,
+                ]);
+    }
+    
+    public function getEditView($task_id = null){
+        $categories = Category::all();
+        
+        $task = null;
+        if(!empty($task_id)&&  is_numeric($task_id)){
+            $task = Task::find($task_id)
+                    ->where('user_id',Auth::user()->id)
+                    ->where('deleted',false)
+                    ->first();
+        }
+        else{
+            abort(404);
+        }
+
+        return view('task/create',
+                [
+                    'categories' => $categories,
+                    'task' => $task
+                ]);
     }
     
     public function viewTask($id = null){

@@ -34,14 +34,26 @@ Route::group(['middleware' => ['web']], function () {
 
 Route::group(['middleware' => 'web'], function () {
     Route::auth();
+    Route::get('/home', 'HomeController@index');
 
     Route::get('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@getCreateView']);
     Route::post('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@create']);
+    Route::get('tasks/edit/{id}', ['middleware' => 'auth', 'uses' => 'TaskController@getEditView']);
     Route::get('tasks/file/{id}', 'TaskController@viewTaskFile');
     
     Route::get('solution/create/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getCreateView']);
     Route::post('solution/create', ['middleware' => 'auth', 'uses' => 'SolutionController@create']);
     Route::get('solution/file/{id}', 'SolutionController@viewSolutionFile');
     
-    Route::get('/home', 'HomeController@index');
+    Route::get('/account', ['middleware' => 'auth', 'uses' => 'UserController@account']);
+    Route::get('/account/change/email', ['middleware' => 'auth', 'uses' => 'UserController@getChangeEmailView']);
+    Route::post('/account/change/email', ['middleware' => 'auth', 'uses' => 'UserController@changeEmail']);
+    Route::get('/account/change/name', ['middleware' => 'auth', 'uses' => 'UserController@getChangeNameView']);
+    Route::post('/account/change/name', ['middleware' => 'auth', 'uses' => 'UserController@changeName']);
+    Route::get('/account/change/password', ['middleware' => 'auth', 'uses' => 'UserController@getChangePasswordView']);
+    Route::post('/account/change/password', ['middleware' => 'auth', 'uses' => 'UserController@changePassword']);
+        
+    Route::get('/my/tasks', ['middleware' => 'auth', 'uses' => 'UserController@tasks']);
+    Route::get('/my/solutions', ['middleware' => 'auth', 'uses' => 'UserController@solutions']);
+    
 });
