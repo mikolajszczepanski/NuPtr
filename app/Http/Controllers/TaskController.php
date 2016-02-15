@@ -21,15 +21,24 @@ use Auth;
 class TaskController extends Controller
 {
 
-    public function index($paginate = 15){
+    public function index($alias = null,$paginate = 15){
         
-        $tasks = Task::where('deleted',false)
-                ->orderBy('created_at','desc')
-                ->paginate($paginate);
+        $tasks = Task::where('deleted',false);
+        
+        if(!empty($alias) && strlen($alias) >= 1 && strlen($alias) <= 20){
+            $category = Category::where('alias',$alias)->first();
+            if($category){
+                $tasks = $tasks->where('category_id',$category->id);
+            }
+        }
+        
+        $tasks = $tasks->orderBy('created_at','desc')
+                       ->paginate($paginate);
          
         Task::resolveTasksDependencies($tasks);
           
-        return view('task/index',['tasks' => $tasks]);
+        return view('task/index',['tasks' => $tasks,
+                                  'alias' => $alias]);
     }
     
     
@@ -42,6 +51,7 @@ class TaskController extends Controller
         return view('task/create',
                 [
                     'categories' => $categories,
+                    'task' => null
                 ]);
     }
     
@@ -50,14 +60,16 @@ class TaskController extends Controller
         
         $task = null;
         if(!empty($task_id)&&  is_numeric($task_id)){
-            $task = Task::find($task_id)
+            $task = Task::where('id',$task_id)
                     ->where('user_id',Auth::user()->id)
                     ->where('deleted',false)
                     ->first();
         }
-        else{
+        if(!$task){
             abort(404);
         }
+        
+        Task::resolveTaskDependencies($task, $categories);
 
         return view('task/create',
                 [
@@ -72,10 +84,12 @@ class TaskController extends Controller
     
     public function viewTaskFile($id = null){
         
-        $taskFile = TaskFile::where('id',$id)->first();
+        $taskFile = TaskFile::where('id',$id)
+                ->where('deleted',false)
+                ->first();
         
         if(!$taskFile){
-            App::abort(404);
+            abort(404);
         }
         
         return view('task/file',['taskFile' => $taskFile]);
@@ -83,7 +97,7 @@ class TaskController extends Controller
     }
     
     
-    public function create(Request $request){
+    public function createOrEdit(Request $request){
         
 
         $this->validate($request, [
@@ -92,14 +106,33 @@ class TaskController extends Controller
             'description' => 'max:500',
             'category_id' => 'required|numeric',
             'files.*.name' => 'required|min:2|max:60',
-            'files.*.content' => 'required|min:2|max:1000000',
+            'files.*.data' => 'required|min:2|max:1000000',
         ]);
         $category = Category::where('id',$request->input('category_id'))->first();
         if(!$category){
             App::abort(406);
         }
+        $task_id = $request->input('task_id');
         
-        $task = new Task;
+        $task = null;
+        if(!empty($task_id) && is_numeric($task_id)){
+            $task = Task::where('id',$task_id)
+                    ->where('user_id',$request->user()->id)
+                    ->where('deleted',false)
+                    ->first();
+            if(!$task){
+                abort(406);
+            }
+            DB::table('task_files')
+                    ->where('task_id',$task_id)
+                    ->where('user_id',$request->user()->id)
+                    ->update(array('deleted' => true));
+        }
+        else{
+            $task_id = null;
+            $task = new Task;
+        }
+        
         
         $task->name = $request->input('name');
         $task->author = $request->input('author');
@@ -109,6 +142,7 @@ class TaskController extends Controller
         $filesArray = $request->input('files');
         
         $pass = $task->save();
+        
       
         if(is_array($filesArray)){
             
@@ -117,7 +151,7 @@ class TaskController extends Controller
                 $taskFile = new TaskFile;
 
                 $taskFile->name = $file['name'];
-                $taskFile->data = $file['content'];
+                $taskFile->data = $file['data'];
                 $taskFile->user_id = $request->user()->id;
                 $taskFile->task_id = $task->id;
 
@@ -128,6 +162,7 @@ class TaskController extends Controller
             
         }
         
+               
         if($pass){
             Alert::setSuccessAlert('Your task has saved.');
         }
@@ -137,5 +172,53 @@ class TaskController extends Controller
         
             
         return redirect()->action('HomeController@index');
+    }
+    
+    public function getDeleteView($task_id = null){
+        
+        if(empty($task_id) || !is_numeric($task_id)){
+            abort(406);
+        }
+        
+        $task = Task::where('id',$task_id)
+                ->where('deleted',false)
+                ->where('user_id',Auth::user()->id)
+                ->first();
+        
+        if(!$task){
+            abort(404);
+        }
+            
+        return view('task/delete',['task' => $task]);
+    }
+    
+    public function delete(Request $request){
+        $this->validate($request, [
+            'task_id' => 'required|numeric',
+        ]);
+        $task_id = $request->input('task_id');
+        $task = Task::where('id',$task_id)
+                ->where('deleted',false)
+                ->where('user_id',Auth::user()->id)
+                ->first();
+        
+        if(!$task){
+            abort(404);
+        }
+        
+        $task->deleted = true;
+        
+        $pass = $task->save();
+        
+        if($pass){
+            Alert::setSuccessAlert('Your task has been deleted.');
+        }
+        else{
+            Alert::setErrorAlert('Unknown error.');
+        }
+        
+            
+        return redirect()->action('HomeController@index');
+        
     }
 }

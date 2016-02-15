@@ -12,9 +12,22 @@ body {
     margin-top:60px;
 }
 
+#navbar{
+    
+}
+
 .data-row{
     border: 1px solid #eee;
     border-left-color: #1b809e !important;
+    background-color: #FAFAFA;
+    padding: 10px;
+    margin: 10px;
+}
+
+.data-row-danger{
+    border: 1px solid #eee;
+    border-left-color: #D50000 !important;
+    background-color: #FAFAFA;
     padding: 10px;
     margin: 10px;
 }

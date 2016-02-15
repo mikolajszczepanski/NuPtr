@@ -1,133 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@extends('layouts.basic')
 
-    <title>NuPtr</title>
-    <link rel="shortcut icon" href="{{ asset('public/favicon.ico') }}">
-    
-    <meta name="description" content="Tasks and solutions online repertory">
-    <meta name="keywords" content="tasks,programming,code,problems,solutions">
+@section('body')
 
-    <!-- Fonts -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700" rel='stylesheet' type='text/css'>
+<nav id="navbar" class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
 
-    <!-- Styles -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    {{-- <link href="{{ elixir('public/css/app.css') }}" rel="stylesheet"> --}}
-    <link rel="stylesheet" type="text/css" href="{{ asset('public/css/default.css') }}" />
-    
-    <!-- JavaScripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    {{-- <script src="{{ elixir('public/js/app.js') }}"></script> --}}
+            <!-- Collapsed Hamburger -->
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-    <!-- Cookies -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('public/css/jquery.cookiebar.css') }}" />
-    <script type="text/javascript" src="{{ asset('public/js/jquery.cookiebar.js') }}"></script>
-    
-    
-    <!-- Default -->
-    <script type="text/javascript" src="{{ asset('public/js/default.js') }}"></script>
-    
-</head>
-<body id="app-layout">
-    <nav id="navbar" class="navbar navbar-default">
-        <div class="container">
-            <div class="navbar-header">
+            <!-- Branding Image -->
+            <a class="navbar-brand" href="{{ url('/') }}">
+                NuPtr
+            </a>
+        </div>
 
-                <!-- Collapsed Hamburger -->
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                    <span class="sr-only">Toggle Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+        <div class="collapse navbar-collapse" id="app-navbar-collapse">
+            <!-- Left Side Of Navbar -->
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        Tasks <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{{ url('/tasks') }}">All</a></li>
+                        <li role="separator" class="divider"></li>
+                        @foreach($categories as $category)
+                        <li><a href="{{ action('TaskController@index',['alias' => $category->alias]) }}">{{$category->name}}</a></li>
+                        @endforeach
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ url('tasks/create') }}">Add new task</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url('/contact') }}">Contact</a></li>
+            </ul>
 
-                <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    NuPtr
-                </a>
-            </div>
-
-            <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                <!-- Left Side Of Navbar -->
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            Tasks <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="{{ url('/tasks') }}">All</a></li>
-                           
-                        </ul>
-                    </li>
-                    <li><a href="{{ url('/contact') }}">Contact</a></li>
-                </ul>
-                
-                <!-- Search -->
-                <div class="col-sm-offset-0 col-md-offset-1 col-lg-offset-1 col-sm-5 col-md-5 col-lg-6 pull-left">
-                    <form class="navbar-form" role="search">
-                        <div id="search" class="input-group">
-                                <input type="text" class="form-control" placeholder="Search" name="" id="">
-                                <div class="input-group-btn">
-                                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                                </div>
+            <!-- Search -->
+            <div class="col-sm-offset-0 col-md-offset-1 col-lg-offset-1 col-sm-5 col-md-5 col-lg-6 pull-left">
+                <form class="navbar-form" role="search">
+                    <div id="search" class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="" id="">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
-                    </form>
-                </div>
-                    
-                <!-- Right Side Of Navbar -->
-                <ul class="nav navbar-nav navbar-right">
-                    <!-- Authentication Links -->
-                    @if (Auth::guest())
-                        <li><a href="{{ url('/login') }}">Login</a></li>
-                        <li><a href="{{ url('/register') }}">Register</a></li>
-                    @else
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="{{ url('/account') }}"><i class="fa fa-btn fa-user"></i>My account</a></li>
-                                <li><a href="{{ url('/my/tasks') }}"><i class="fa fa-btn fa-star"></i>View my tasks</a></li>
-                                <li><a href="{{ url('/my/solutions') }}"><i class="fa fa-btn fa-star"></i>View my solutions</a></li>
-                                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-                            </ul>
-                        </li>
-                    @endif
-                </ul>
+                    </div>
+                </form>
             </div>
-        </div>
-    </nav>
 
-    <div id="main-content" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-        @if(Session::has('alert'))
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-            <p id="alert-message" 
-               class="alert {{ Session::get('alert')->class }} col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
-                <strong>{{ Session::get('alert')->title }}</strong> {{ Session::get('alert')->text }}
-            </p>
-        </div>
-        @endif
-        <div class="container">
-        @yield('content')
+            <!-- Right Side Of Navbar -->
+            <ul class="nav navbar-nav navbar-right">
+                <!-- Authentication Links -->
+                @if (Auth::guest())
+                <li><a href="{{ url('/login') }}">Login</a></li>
+                <li><a href="{{ url('/register') }}">Register</a></li>
+                @else
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        {{ Auth::user()->name }} <span class="caret"></span>
+                    </a>
+
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="{{ url('/account') }}"><i class="fa fa-btn fa-user"></i>My account</a></li>
+                        <li><a href="{{ url('/my/tasks') }}"><i class="fa fa-btn fa-star"></i>View my tasks</a></li>
+                        <li><a href="{{ url('/my/solutions') }}"><i class="fa fa-btn fa-star"></i>View my solutions</a></li>
+                        <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
+                    </ul>
+                </li>
+                @endif
+            </ul>
         </div>
     </div>
+</nav>
 
-    <div>
-        <hr>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
-            <br>
-            <p class="text-center">
-                All right reserved
-            </p>
-        </div>
+<div id="main-content" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+    @if(Session::has('alert'))
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+        <p id="alert-message" 
+           class="alert {{ Session::get('alert')->class }} col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2">
+            <strong>{{ Session::get('alert')->title }}</strong> {{ Session::get('alert')->text }}
+        </p>
     </div>
-    
-</body>
-</html>
+    @endif
+
+    @yield('content')
+
+</div>
+
+<div>
+    <hr>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+        <br>
+        <p class="text-center">
+            All right reserved
+        </p>
+    </div>
+</div>
+
+@endsection

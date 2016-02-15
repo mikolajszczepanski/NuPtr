@@ -2,10 +2,12 @@
     <thead>
         <tr>
             <th width="5%">#</th>
+            @if(empty($alias))
             <th width="5%">Category</th>
+            @endif
             <th width="15%">Name</th>
             <th width="15%">Author</th>
-            <th width="45%">Descripton\solutions</th>
+            <th width="{{(empty($alias)) ? '45%' : '50%'}}">Descripton\solutions</th>
             <th width="15%">Created</th>
         </tr>
     </thead>
@@ -13,7 +15,9 @@
         @foreach($tasks as $task)
         <tr class="clickableRow" link="{{$task->id}}">
             <td>{{$task->id}}</td>
+            @if(empty($alias))
             <td>{{$task->category_name}}</td>
+            @endif
             <td>{{$task->name}}</td>
             <td>
                 {{$task->author}}

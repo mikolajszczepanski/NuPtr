@@ -13,12 +13,12 @@ $(function(){
             '<label for="file_name{{NUMBER}}">File {{NUMBER}}</label>' +
             '<input type="text" name="files[{{NUMBER}}][name]" class="form-control" id="file_name{{NUMBER}}" placeholder="Name of file {{NUMBER}}">' +
             '</div><div class="form-group">' +
-            '<label for="file_content{{NUMBER}}">Content</label>' +
-            '<textarea class="form-control" name="files[{{NUMBER}}][content]" id="file_content{{NUMBER}}" rows="6"></textarea>' +
+            '<label for="file_data{{NUMBER}}">Code</label>' +
+            '<textarea class="form-control" name="files[{{NUMBER}}][data]" id="file_data{{NUMBER}}" rows="6"></textarea>' +
             '</div>' +
             '</div>';
     
-   var numFiles = 0;
+   var numFiles = $('#num_of_files') ? $('#num_of_files').val() : 0;
    
    $('#addFileToFilesArray').click(function(event){
        numFiles++;

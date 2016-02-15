@@ -11,9 +11,7 @@
 
 <div class="container-fluid">
     <h3>{{ $solutionFile->name }} <small>Updated at {{$solutionFile->updated_at}}</small></h3>
-    <pre class="brush: cpp;">
-    {{$solutionFile->data}}
-    </pre>
+    <pre class="brush: cpp;">{{$solutionFile->data}}</pre>
 </div>
 <script type="text/javascript">SyntaxHighlighter.all();</script>
 

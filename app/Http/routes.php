@@ -29,6 +29,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/contact', 'HomeController@contact');
     
     Route::get('/tasks', 'TaskController@index');
+    Route::get('/tasks/show/{alias}', 'TaskController@index');
 
 });
 
@@ -37,12 +38,18 @@ Route::group(['middleware' => 'web'], function () {
     Route::get('/home', 'HomeController@index');
 
     Route::get('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@getCreateView']);
-    Route::post('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@create']);
+    Route::post('tasks/createOrEdit', ['middleware' => 'auth', 'uses' => 'TaskController@createOrEdit']);
     Route::get('tasks/edit/{id}', ['middleware' => 'auth', 'uses' => 'TaskController@getEditView']);
+    Route::get('tasks/delete/{id}', ['middleware' => 'auth', 'uses' => 'TaskController@getDeleteView']);
+    Route::post('tasks/delete', ['middleware' => 'auth', 'uses' => 'TaskController@delete']);
     Route::get('tasks/file/{id}', 'TaskController@viewTaskFile');
     
+    
     Route::get('solution/create/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getCreateView']);
-    Route::post('solution/create', ['middleware' => 'auth', 'uses' => 'SolutionController@create']);
+    Route::post('solution/createOrEdit', ['middleware' => 'auth', 'uses' => 'SolutionController@createOrEdit']);
+    Route::get('solution/edit/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getEditView']);
+    Route::get('solution/delete/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getDeleteView']);
+    Route::post('solution/delete', ['middleware' => 'auth', 'uses' => 'SolutionController@delete']);
     Route::get('solution/file/{id}', 'SolutionController@viewSolutionFile');
     
     Route::get('/account', ['middleware' => 'auth', 'uses' => 'UserController@account']);

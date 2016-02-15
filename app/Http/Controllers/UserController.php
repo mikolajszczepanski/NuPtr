@@ -11,6 +11,7 @@ use App\Alert;
 use App\User;
 use App\Task;
 use App\Solution;
+use DB;
 use Validator;
 use Illuminate\Support\Facades\Hash;
 
@@ -103,12 +104,23 @@ class UserController extends Controller
         $user_id = Auth::user()->id;
         $tasks = Task::where('user_id',$user_id)
                 ->where('deleted',false)
+                ->orderBy('created_at','desc')
                 ->paginate(15);
         Task::resolveTasksDependencies($tasks);
         return view('user/tasks',['tasks' => $tasks]);
     }
     
     public function solutions(){
-        return 'mysolutions';
+        $user_id = Auth::user()->id;
+        $solutions = DB::table('solutions')
+                ->join('tasks','solutions.task_id','=','tasks.id')
+                ->where('solutions.user_id',$user_id)
+                ->where('solutions.deleted',false)
+                ->where('tasks.deleted',false)
+                ->orderBy('solutions.created_at','desc')
+                ->select('solutions.*','tasks.name AS task_name')
+                ->paginate(15);
+        Solution::resolveSolutionsFiles($solutions);
+        return view('user/solutions',['solutions' => $solutions]);
     }
 }
