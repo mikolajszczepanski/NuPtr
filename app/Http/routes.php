@@ -27,9 +27,11 @@
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', 'HomeController@index');
     Route::get('/contact', 'HomeController@contact');
+    Route::post('/message', 'HomeController@createContactMessage');
     
     Route::get('/tasks', 'TaskController@index');
     Route::get('/tasks/show/{alias}', 'TaskController@index');
+    Route::get('/search/{search}', 'TaskController@search');
 
 });
 
@@ -62,5 +64,14 @@ Route::group(['middleware' => 'web'], function () {
         
     Route::get('/my/tasks', ['middleware' => 'auth', 'uses' => 'UserController@tasks']);
     Route::get('/my/solutions', ['middleware' => 'auth', 'uses' => 'UserController@solutions']);
+    
+    Route::group(['middleware' => ['auth','admin']], function () {
+    
+        Route::get('/admin', ['uses' => 'AdminController@messages']);
+        Route::get('/admin/messages', ['uses' => 'AdminController@messages']);
+        Route::get('/admin/users', ['uses' => 'AdminController@users']);
+        Route::get('/admin/logs', ['uses' => '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index']);
+
+    });
     
 });

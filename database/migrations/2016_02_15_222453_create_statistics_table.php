@@ -27,15 +27,18 @@ class CreateStatisticsTable extends Migration
          */
         DB::table('statistics')->insert(array(
             'name' => 'users',
-            'value' => 0
+            'value' => 0,
+            'created_at' => date("Y-m-d H:i:s")
             ));
         DB::table('statistics')->insert(array(
             'name' => 'tasks',
-            'value' => 0
+            'value' => 0,
+            'created_at' => date("Y-m-d H:i:s")
             ));
         DB::table('statistics')->insert(array(
             'name' => 'solutions',
-            'value' => 0
+            'value' => 0,
+            'created_at' => date("Y-m-d H:i:s")
             ));
     }
 

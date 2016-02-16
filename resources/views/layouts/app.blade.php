@@ -65,6 +65,9 @@
                     </a>
 
                     <ul class="dropdown-menu" role="menu">
+                        @if(Auth::user()->admin)
+                        <li><a href="{{ url('/admin') }}"><i class="fa fa-btn fa-th"></i>Admin panel</a></li>
+                        @endif
                         <li><a href="{{ url('/account') }}"><i class="fa fa-btn fa-user"></i>My account</a></li>
                         <li><a href="{{ url('/my/tasks') }}"><i class="fa fa-btn fa-star"></i>View my tasks</a></li>
                         <li><a href="{{ url('/my/solutions') }}"><i class="fa fa-btn fa-star"></i>View my solutions</a></li>

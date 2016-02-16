@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\TaskController;
 use App\Task;
 use App\Statistic;
+use App\ContactMessage;
+use App\ContactMessagesCategory;
+use App\Alert;
 
 class HomeController extends Controller
 {
@@ -40,6 +43,41 @@ class HomeController extends Controller
     
     public function contact()
     {
-        return view('home/contact');
+        $contact_messages_categories = ContactMessagesCategory::all();
+        return view('home/contact',['contact_messages_categories' => $contact_messages_categories]);
+    }
+    
+    public function createContactMessage(Request $request){
+        $this->validate($request, [
+            'email' => 'email|max:40',
+            'text' => 'required|max:100000|min:2',
+            'category_id' => 'required|numeric',
+        ]);
+        
+        $email = $request->input('email');
+        $text = $request->input('text');
+        $category_id = $request->input('category_id');
+        
+        $category = ContactMessagesCategory::where('id',$category_id)->first();
+        
+        if(!$category){
+            abort(406);
+        }
+        
+        $message = new ContactMessage;
+        $message->email = !empty($email) ? $email : NULL;
+        $message->text = $text;
+        $message->category_id = $category_id;
+        
+        $pass = $message->save();
+        
+        if($pass){
+            Alert::setSuccessAlert('Your message was send.');
+        }
+        else{
+            Alert::setErrorAlert('Error '.__METHOD__);
+        }
+        
+        return redirect()->action('HomeController@index');
     }
 }

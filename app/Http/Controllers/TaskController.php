@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use DB;
+use Auth;
 use App;
 use App\Task;
 use App\TaskFile;
@@ -15,8 +17,7 @@ use App\Category;
 use App\Solution;
 use App\SolutionFile;
 use App\User;
-use DB;
-use Auth;
+use App\Statistic;
 
 class TaskController extends Controller
 {
@@ -39,6 +40,32 @@ class TaskController extends Controller
           
         return view('task/index',['tasks' => $tasks,
                                   'alias' => $alias]);
+    }
+    
+    
+    public function search($search = null,$paginate = 15){
+        
+        $tasks = Task::where('deleted',false);
+        
+        
+        if(!empty($search)){
+            
+            
+            $tasks = $tasks->orderBy('created_at','desc')
+                       ->paginate($paginate);
+         
+            Task::resolveTasksDependencies($tasks);
+        }
+        else{
+            $tasks = null;
+        }
+        
+      
+        
+        return view('task/index',['tasks' => $tasks,
+                                  'search' => $search,
+                                  'alias' => null]);
+        
     }
     
     
@@ -131,6 +158,7 @@ class TaskController extends Controller
         else{
             $task_id = null;
             $task = new Task;
+            Statistic::AddTask();
         }
         
         
@@ -217,7 +245,7 @@ class TaskController extends Controller
             Alert::setErrorAlert('Unknown error.');
         }
         
-            
+        Statistic::SubTask();    
         return redirect()->action('HomeController@index');
         
     }

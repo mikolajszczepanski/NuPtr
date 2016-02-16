@@ -35,6 +35,11 @@
                 </i>
             </div>
         </div>
+        @if(Auth::user()->admin)
+        <div class="data-row-danger col-lg-12 col-md-12 col-sd-12 col-xs-12">
+            <p style="color:#D50000;">This is an admin account.</p>
+        </div>
+        @endif
     </div>
 </div>
 @endsection

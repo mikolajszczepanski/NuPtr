@@ -62,4 +62,5 @@
         @endforeach
     </tbody>
 </table>
+{!! $tasks->render() !!}
 <script src="{{ asset('public/js/tasksTable.js') }}"></script>

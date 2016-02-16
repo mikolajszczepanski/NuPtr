@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use DB;
 use Auth;
+use App\Statistic;
 use App\Solution;
 use App\Task;
 use App\SolutionFile;
@@ -74,6 +75,7 @@ class SolutionController extends Controller
         else{
             $solution_id = null;
             $solution = new Solution();
+            Statistic::AddSolution();
         }
         
         $solution->user_id = $user_id;
@@ -169,7 +171,7 @@ class SolutionController extends Controller
             Alert::setErrorAlert('Unknown error.');
         }
         
-            
+        Statistic::SubSolution();    
         return redirect()->action('HomeController@index');
         
     }
