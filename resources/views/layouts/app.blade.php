@@ -34,7 +34,7 @@
                         <li><a href="{{ action('TaskController@index',['alias' => $category->alias]) }}">{{$category->name}}</a></li>
                         @endforeach
                         <li role="separator" class="divider"></li>
-                        <li><a href="{{ url('tasks/create') }}">Add new task</a></li>
+                        <li><a href="{{ action('TaskController@getCreateView') }}">Add new task</a></li>
                     </ul>
                 </li>
                 <li><a href="{{ url('/contact') }}">Contact</a></li>
@@ -42,9 +42,9 @@
 
             <!-- Search -->
             <div class="col-sm-offset-0 col-md-offset-1 col-lg-offset-1 col-sm-5 col-md-5 col-lg-6 pull-left">
-                <form class="navbar-form" role="search">
+                <form method="get" class="navbar-form" role="search" action="{{action('TaskController@search')}}">
                     <div id="search" class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" name="" id="">
+                        <input type="text" class="form-control" placeholder="Search" name="s" id="search" value="{{ !empty($search) ? $search : '' }}">
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                         </div>

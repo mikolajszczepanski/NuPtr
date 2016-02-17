@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>NuPtr</title>
-    <link rel="shortcut icon" href="{{ asset('public/favicon.ico') }}">
+    <!-- <link rel="shortcut icon" href="{{ asset('public/favicon.ico') }}"> -->
     
     <meta name="description" content="Tasks and solutions online repertory">
     <meta name="keywords" content="tasks,programming,code,problems,solutions">

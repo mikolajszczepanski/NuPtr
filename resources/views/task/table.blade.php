@@ -1,3 +1,4 @@
+@if($tasks)
 <table class="table table-striped">
     <thead>
         <tr>
@@ -63,4 +64,9 @@
     </tbody>
 </table>
 {!! $tasks->render() !!}
+
 <script src="{{ asset('public/js/tasksTable.js') }}"></script>
+@else
+<br>
+<p><i>No results</i></p>
+@endif

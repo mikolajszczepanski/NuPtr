@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 
 use DB;
 use Auth;
+use Log;
 use App\Statistic;
 use App\Solution;
 use App\Task;
@@ -105,6 +106,11 @@ class SolutionController extends Controller
             Alert::setSuccessAlert('Your solution has saved.');
         }
         else{
+            Log::alert(__METHOD__.'('.__FILE__.')', array(
+                                  'solution_id' => $solution->id,
+                                  'user_id' => Auth::user()->id,
+            ));
+            
             Alert::setErrorAlert('Something bad happend. Your solution can be incompile or can\'t be save.');
         }
         
@@ -168,6 +174,12 @@ class SolutionController extends Controller
             Alert::setSuccessAlert('Your solution has been deleted.');
         }
         else{
+            
+            Log::alert(__METHOD__.'('.__FILE__.')', array(
+                                  'solution_id' => $solution->id,
+                                  'user_id' => Auth::user()->id,
+            ));
+            
             Alert::setErrorAlert('Unknown error.');
         }
         

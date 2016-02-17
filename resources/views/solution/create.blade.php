@@ -6,7 +6,7 @@
 
 @section('content')
 <div class="col-lg-8 col-lg-offset-2">
-    <h3>Add solution</h3>
+    <h3>{{ $solution ? 'Editing solution' : 'Create new solution'}}</h3>
     @if (count($errors) > 0)
         <div class="alert alert-danger">
             <ul>

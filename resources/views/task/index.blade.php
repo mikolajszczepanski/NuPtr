@@ -14,7 +14,11 @@
         ?>
     </h3>
     @endif
-    <a href="{{action('TaskController@getCreateView')}}">[add new]</a>
+    <!--
+    <a class="btn btn-primary" style="font-size:80%" href="{{action('TaskController@getCreateView')}}">
+        Add new
+    </a>
+    -->
     @include('task.table') 
 
 </div>

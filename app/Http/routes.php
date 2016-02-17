@@ -31,41 +31,42 @@ Route::group(['middleware' => ['web']], function () {
     
     Route::get('/tasks', 'TaskController@index');
     Route::get('/tasks/show/{alias}', 'TaskController@index');
-    Route::get('/search/{search}', 'TaskController@search');
+    Route::get('/search/{search?}', 'TaskController@search');
 
+    Route::get('/task/file/{id}', 'TaskController@viewTaskFile');
+    Route::get('/task/view/{id}', 'TaskController@viewTask');
+    
+    Route::get('/solution/file/{id}', 'SolutionController@viewSolutionFile');
+    
+    Route::auth();
 });
 
-Route::group(['middleware' => 'web'], function () {
-    Route::auth();
-    Route::get('/home', 'HomeController@index');
+Route::group(['middleware' => ['web','auth']], function () {;
 
-    Route::get('tasks/create', ['middleware' => 'auth', 'uses' => 'TaskController@getCreateView']);
-    Route::post('tasks/createOrEdit', ['middleware' => 'auth', 'uses' => 'TaskController@createOrEdit']);
-    Route::get('tasks/edit/{id}', ['middleware' => 'auth', 'uses' => 'TaskController@getEditView']);
-    Route::get('tasks/delete/{id}', ['middleware' => 'auth', 'uses' => 'TaskController@getDeleteView']);
-    Route::post('tasks/delete', ['middleware' => 'auth', 'uses' => 'TaskController@delete']);
-    Route::get('tasks/file/{id}', 'TaskController@viewTaskFile');
+    Route::get('/task/create', ['uses' => 'TaskController@getCreateView']);
+    Route::post('/task/createOrEdit', ['uses' => 'TaskController@createOrEdit']);
+    Route::get('/task/edit/{id}', ['uses' => 'TaskController@getEditView']);
+    Route::get('/task/delete/{id}', ['uses' => 'TaskController@getDeleteView']);
+    Route::post('/task/delete', ['uses' => 'TaskController@delete']);
+
+    Route::get('/solution/create/{id}', ['uses' => 'SolutionController@getCreateView']);
+    Route::post('/solution/createOrEdit', ['uses' => 'SolutionController@createOrEdit']);
+    Route::get('/solution/edit/{id}', ['uses' => 'SolutionController@getEditView']);
+    Route::get('/solution/delete/{id}', ['uses' => 'SolutionController@getDeleteView']);
+    Route::post('/solution/delete', ['uses' => 'SolutionController@delete']);
     
-    
-    Route::get('solution/create/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getCreateView']);
-    Route::post('solution/createOrEdit', ['middleware' => 'auth', 'uses' => 'SolutionController@createOrEdit']);
-    Route::get('solution/edit/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getEditView']);
-    Route::get('solution/delete/{id}', ['middleware' => 'auth', 'uses' => 'SolutionController@getDeleteView']);
-    Route::post('solution/delete', ['middleware' => 'auth', 'uses' => 'SolutionController@delete']);
-    Route::get('solution/file/{id}', 'SolutionController@viewSolutionFile');
-    
-    Route::get('/account', ['middleware' => 'auth', 'uses' => 'UserController@account']);
-    Route::get('/account/change/email', ['middleware' => 'auth', 'uses' => 'UserController@getChangeEmailView']);
-    Route::post('/account/change/email', ['middleware' => 'auth', 'uses' => 'UserController@changeEmail']);
-    Route::get('/account/change/name', ['middleware' => 'auth', 'uses' => 'UserController@getChangeNameView']);
-    Route::post('/account/change/name', ['middleware' => 'auth', 'uses' => 'UserController@changeName']);
-    Route::get('/account/change/password', ['middleware' => 'auth', 'uses' => 'UserController@getChangePasswordView']);
-    Route::post('/account/change/password', ['middleware' => 'auth', 'uses' => 'UserController@changePassword']);
+    Route::get('/account', ['uses' => 'UserController@account']);
+    Route::get('/account/change/email', [ 'uses' => 'UserController@getChangeEmailView']);
+    Route::post('/account/change/email', ['uses' => 'UserController@changeEmail']);
+    Route::get('/account/change/name', ['uses' => 'UserController@getChangeNameView']);
+    Route::post('/account/change/name', ['uses' => 'UserController@changeName']);
+    Route::get('/account/change/password', ['uses' => 'UserController@getChangePasswordView']);
+    Route::post('/account/change/password', ['uses' => 'UserController@changePassword']);
         
-    Route::get('/my/tasks', ['middleware' => 'auth', 'uses' => 'UserController@tasks']);
-    Route::get('/my/solutions', ['middleware' => 'auth', 'uses' => 'UserController@solutions']);
+    Route::get('/my/tasks', ['uses' => 'UserController@tasks']);
+    Route::get('/my/solutions', ['uses' => 'UserController@solutions']);
     
-    Route::group(['middleware' => ['auth','admin']], function () {
+    Route::group(['middleware' => ['admin']], function () {
     
         Route::get('/admin', ['uses' => 'AdminController@messages']);
         Route::get('/admin/messages', ['uses' => 'AdminController@messages']);

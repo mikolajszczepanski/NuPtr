@@ -20,7 +20,7 @@
             @foreach($tasks as $task)
             <tr>
                 <td>{{$task->id}}</td>
-                <td>{{$task->name}}</td>
+                <td><a href="{{action('TaskController@viewTask',['id' => $task->id])}}">{{$task->name}}<a></td>
                 <td>{{$task->category_name}}</td>
                 <td>{{$task->author}}</td>
                 <td>

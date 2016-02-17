@@ -16,7 +16,11 @@
         <tbody>
             @foreach($solutions as $solution)
             <tr>
-                <td>{{$solution->task_name}}</td>
+                <td>
+                    <a href="{{action('TaskController@viewTask',['id' => $solution->task_id])}}">
+                        {{$solution->task_name}}
+                    </a>
+                </td>
                 <td>
                    <p>
                         @foreach ($solution->files as $file)

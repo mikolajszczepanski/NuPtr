@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use Auth;
 use App;
+use Log;
 use App\Task;
 use App\TaskFile;
 use App\Alert;
@@ -37,18 +38,29 @@ class TaskController extends Controller
                        ->paginate($paginate);
          
         Task::resolveTasksDependencies($tasks);
+        
           
         return view('task/index',['tasks' => $tasks,
                                   'alias' => $alias]);
     }
     
     
-    public function search($search = null,$paginate = 15){
+    public function search(Request $request = null,$paginate = 15){
         
+        $string = $request->input('s');
         $tasks = Task::where('deleted',false);
-        
-        
-        if(!empty($search)){
+        if(!empty($string)){
+            
+            if(is_numeric($string)){
+                $tasks = $tasks->where('id',$string);
+            }
+            else{
+                $tasks = $tasks->where(function($query) use ($string){
+                   $query->where('author','LIKE','%'.$string.'%')
+                           ->orWhere('name','LIKE','%'.$string.'%')
+                           ->orWhere('description','LIKE','%'.$string.'%');
+                });
+            }
             
             
             $tasks = $tasks->orderBy('created_at','desc')
@@ -59,11 +71,9 @@ class TaskController extends Controller
         else{
             $tasks = null;
         }
-        
-      
-        
-        return view('task/index',['tasks' => $tasks,
-                                  'search' => $search,
+
+        return view('task/search',['tasks' => $tasks,
+                                  'search' => $string,
                                   'alias' => null]);
         
     }
@@ -74,6 +84,7 @@ class TaskController extends Controller
     public function getCreateView($task_id = null){
         
         $categories = Category::all();
+        
         
         return view('task/create',
                 [
@@ -106,7 +117,7 @@ class TaskController extends Controller
     }
     
     public function viewTask($id = null){
-        
+        return redirect(action('TaskController@search').'?s='.$id);
     }
     
     public function viewTaskFile($id = null){
@@ -195,6 +206,11 @@ class TaskController extends Controller
             Alert::setSuccessAlert('Your task has saved.');
         }
         else{
+            Log::alert(__METHOD__.'('.__FILE__.')', array(
+                                  'task_id' => $task->id,
+                                  'user_id' => Auth::user()->id,
+            ));
+             
             Alert::setErrorAlert('Something bad happend. Your task can be incompile or can\'t be save.');
         }
         
@@ -242,6 +258,12 @@ class TaskController extends Controller
             Alert::setSuccessAlert('Your task has been deleted.');
         }
         else{
+            
+            Log::alert(__METHOD__.'('.__FILE__.')', array(
+                                  'task_id' => $task->id,
+                                  'user_id' => Auth::user()->id,
+            ));
+            
             Alert::setErrorAlert('Unknown error.');
         }
         
