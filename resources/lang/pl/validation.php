@@ -106,7 +106,11 @@ return [
     */
 
     'attributes'           => [
-        //
+        'author' => 'Autor',
+        'name' => 'Nazwa',
+        'email' => 'Email',
+        'password' => 'Hasło',
+        'current_password' => 'Aktualne hasło',
     ],
 
 ];

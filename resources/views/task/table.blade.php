@@ -4,12 +4,12 @@
         <tr>
             <th width="5%">#</th>
             @if(empty($alias))
-            <th width="5%">Category</th>
+            <th width="5%">{{Lang::get('app.category')}}</th>
             @endif
-            <th width="15%">Name</th>
-            <th width="15%">Author</th>
-            <th width="{{(empty($alias)) ? '45%' : '50%'}}">Descripton\solutions</th>
-            <th width="15%">Created</th>
+            <th width="15%">{{Lang::get('app.name')}}</th>
+            <th width="15%">{{Lang::get('app.author')}}</th>
+            <th width="{{(empty($alias)) ? '45%' : '50%'}}">{{Lang::get('app.description_and_solutions')}}</th>
+            <th width="15%">{{Lang::get('app.created')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -54,7 +54,7 @@
                     </table>
                     <a href="{{action('SolutionController@getCreateView',[$task->id])}}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                        Add solution
+                        {{Lang::get('app.add_solution')}}
                     </a>
                 </div>
             </td>

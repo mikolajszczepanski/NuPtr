@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Lang;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -36,10 +37,10 @@ class UserController extends Controller
         $user = User::find($user_id);
         $user->email = $request->input('email');
         if($user->save()){
-            Alert::setSuccessAlert('Your email was change.');
+            Alert::setSuccessAlert(Lang::get('app.email_change'));
         }
         else{
-            Alert::setErrorAlert('Your email wasn\t update.');
+            Alert::setErrorAlert(Lang::get('app.unknown_error'));
         }
         return redirect()->action('UserController@account');
     }
@@ -57,10 +58,10 @@ class UserController extends Controller
         $user = User::find($user_id);
         $user->name = $request->input('name');
         if($user->save()){
-            Alert::setSuccessAlert('Your name was change.');
+            Alert::setSuccessAlert(Lang::get('app.name_change'));
         }
         else{
-            Alert::setErrorAlert('Your name wasn\t update.');
+            Alert::setErrorAlert(Lang::get('app.unknown_error'));
         }
         return redirect()->action('UserController@account');
     }
@@ -79,7 +80,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'current_password' => 'required|password_check',
             'password' => 'required|min:6|confirmed',
-        ],['password_check' => 'Your current password is incorrect.']);
+        ],['password_check' => Lang::get('app.incorrect_current_password')]);
         
         if ($validator->fails()) {
             return redirect()
@@ -92,10 +93,10 @@ class UserController extends Controller
         $user = User::find($user_id);
         $user->password = Hash::make($request->input('password'));
         if($user->save()){
-            Alert::setSuccessAlert('Your password was change.');
+            Alert::setSuccessAlert(Lang::get('app.password_change'));
         }
         else{
-            Alert::setErrorAlert('Your password wasn\t update.');
+            Alert::setErrorAlert(Lang::get('app.unknown_error'));
         }
         return redirect()->action('UserController@account');
     }

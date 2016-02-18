@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Lang;
 use Session;
 
 class Alert
@@ -13,22 +14,22 @@ class Alert
     }
     
     static public function setSuccessAlert($text = null){
-         $title = 'Success.';
+         $title = Lang::get('app.success_header');
          Session::flash('alert', new Alert($text,$title,'alert-success')); 
     }
     
     static public function setInfoAlert($text = null){
-         $title = 'Information.';
+         $title = Lang::get('app.info_header');
          Session::flash('alert', new Alert($text,'alert-info')); 
     }
     
     static public function setWarningAlert($text = null){
-         $title = 'Warning!';
+         $title = Lang::get('app.warning_header');
          Session::flash('alert', new Alert($text,'alert-warning')); 
     }
     
     static public function setErrorAlert($text = null){
-         $title = 'Error!';
+         $title = Lang::get('app.error_header');
          Session::flash('alert', new Alert($text,'alert-danger')); 
     }
     

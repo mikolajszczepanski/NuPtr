@@ -105,6 +105,12 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'author' => 'Author',
+        'name' => 'Name',
+        'email' => 'Email',
+        'password' => 'Password',
+        'current_password' => 'Current Password',
+    ],
 
 ];

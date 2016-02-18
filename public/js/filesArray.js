@@ -7,22 +7,30 @@
 $(function(){
     
     
-   var template = 
-            '<div id="file{{NUMBER}}">' +
-            '<div class="form-group">' +
-            '<label for="file_name{{NUMBER}}">File {{NUMBER}}</label>' +
-            '<input type="text" name="files[{{NUMBER}}][name]" class="form-control" id="file_name{{NUMBER}}" placeholder="Name of file {{NUMBER}}">' +
-            '</div><div class="form-group">' +
-            '<label for="file_data{{NUMBER}}">Code</label>' +
-            '<textarea class="form-control" name="files[{{NUMBER}}][data]" id="file_data{{NUMBER}}" rows="6"></textarea>' +
-            '</div>' +
-            '</div>';
+    var template = null;
+    
+    /* For test server */
+    var url = document.URL;
+    var link_add = '';
+    if(url.indexOf('nuptr.azurewebsites.net') == -1){
+        link_add = '/nuptr';
+    }
+    
+    $.get('http://' + document.domain + link_add + "/api/get/file_template", function( data ) {
+       template = data.file;
+    }).fail(function() {
+        console.log('Error');
+    });
     
    var numFiles = $('#num_of_files') ? $('#num_of_files').val() : 0;
    
    $('#addFileToFilesArray').click(function(event){
+       if(!template){
+           event.preventDefault();
+           return;
+       }
        numFiles++;
-       var temp = template.replace(/{{NUMBER}}/g,numFiles.toString());
+       var temp = template.replace(/{NUMBER}/g,numFiles.toString());
        $('#filesArray').append(temp);
        event.preventDefault();
    });

@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use Lang;
 use DB;
 use Auth;
 use Log;
+use App\Category;
 use App\Statistic;
 use App\Solution;
 use App\Task;
@@ -103,7 +105,7 @@ class SolutionController extends Controller
         }
         
         if($pass){
-            Alert::setSuccessAlert('Your solution has saved.');
+            Alert::setSuccessAlert(Lang::get('app.solution_save'));
         }
         else{
             Log::alert(__METHOD__.'('.__FILE__.')', array(
@@ -111,7 +113,7 @@ class SolutionController extends Controller
                                   'user_id' => Auth::user()->id,
             ));
             
-            Alert::setErrorAlert('Something bad happend. Your solution can be incompile or can\'t be save.');
+            Alert::setErrorAlert(Lang::get('app.unknown_error'));
         }
         
             
@@ -130,7 +132,31 @@ class SolutionController extends Controller
             abort(404);
         }
         
-        return view('solution/file',['solutionFile' => $solutionFile]);
+        $solution = Solution::where('id',$solutionFile->solution_id)
+                ->first();
+        
+        if(!$solution){
+            abort(404);
+        }
+        
+        $task = Task::where('id',$solution->task_id)
+                ->first();
+        
+        if(!$task){
+            abort(404);
+        }
+        
+        $category = Category::where('id',$task->category_id)
+                ->first();
+        
+        
+        if(!$category){
+            abort(500);
+        }
+        
+        return view('solution/file',['solutionFile' => $solutionFile,
+                                     'alias' => $category->alias,
+                                     'script' => $category->script]);
         
     }
     
@@ -171,7 +197,7 @@ class SolutionController extends Controller
         $pass = $solution->save();
         
         if($pass){
-            Alert::setSuccessAlert('Your solution has been deleted.');
+            Alert::setSuccessAlert(Lang::get('app.deleted_solution'));
         }
         else{
             
@@ -180,7 +206,7 @@ class SolutionController extends Controller
                                   'user_id' => Auth::user()->id,
             ));
             
-            Alert::setErrorAlert('Unknown error.');
+            Alert::setErrorAlert(Lang::get('app.unknown_error'));
         }
         
         Statistic::SubSolution();    

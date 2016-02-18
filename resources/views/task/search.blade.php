@@ -4,7 +4,7 @@
 <div class="container">
 
     @if($tasks)
-    <h4>Found: {{count($tasks)}} </h4>
+    <h4>{{Lang::get('app.found')}}: {{count($tasks)}} </h4>
     @endif
     
 @include('task.table') 

@@ -19,15 +19,15 @@ class CreateContactMessagesTable extends Migration
         });
         
         DB::table('contact_messages_categories')->insert(array(
-            'name' => 'Suggestion',
+            'name' => 'suggestion',
         ));
         
         DB::table('contact_messages_categories')->insert(array(
-            'name' => 'Bug report',
+            'name' => 'bug_report',
         ));
         
         DB::table('contact_messages_categories')->insert(array(
-            'name' => 'Other',
+            'name' => 'other',
         ));
         
         Schema::create('contact_messages',function(Blueprint $table){

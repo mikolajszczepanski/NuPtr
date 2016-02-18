@@ -16,26 +16,31 @@ class CreateCategoriesTable extends Migration
             $table->increments('id');
             $table->string('alias',20);
             $table->string('name',60);
+            $table->string('script',25);
             $table->timestamps();
         });
         
         DB::table('categories')->insert(array(
             'alias' => 'cpp',
-            'name' => 'C++'
+            'name' => 'C++',
+            'script' => 'shBrushCpp.js'
             ));
         
         DB::table('categories')->insert(array(
             'alias' => 'c',
-            'name' => 'C'
+            'name' => 'C',
+            'script' => 'shBrushCpp.js'
             ));
         
         DB::table('categories')->insert(array(
             'alias' => 'java',
-            'name' => 'Java'
+            'name' => 'Java',
+            'script' => 'shBrushJava.js'
             ));
         DB::table('categories')->insert(array(
             'alias' => 'py',
-            'name' => 'Python'
+            'name' => 'Python',
+            'script' => 'shBrushPython.js'
             ));
     }
 

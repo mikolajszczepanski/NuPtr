@@ -3,17 +3,17 @@
 @section('content')
 
 <div class="container">
-    <h3>My tasks</h3>
+    <h3>{{Lang::get('app.my_tasks')}}</h3>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th width="5%">#</th>
-                <th width="10%">Name</th>
-                <th width="10%">Category</th>
-                <th width="15%">Author</th>
-                <th width="35%">Description/Files</th>
-                <th width="15%">Created</th>
-                <th width="10%">Operations</th>
+                <th width="10%">{{Lang::get('app.name')}}</th>
+                <th width="10%">{{Lang::get('app.category')}}</th>
+                <th width="15%">{{Lang::get('app.author')}}</th>
+                <th width="35%">{{Lang::get('app.description_and_files')}}</th>
+                <th width="15%">{{Lang::get('app.created')}}</th>
+                <th width="10%">{{Lang::get('app.operations')}}</th>
             </tr>
         </thead>
         <tbody>
@@ -32,8 +32,8 @@
                 </td>
                 <td>{{$task->created_at}}</td>
                 <td>
-                    <a href="{{action('TaskController@getEditView',[$task->id])}}">[edit]</a>
-                    <a href="{{action('TaskController@getDeleteView',[$task->id])}}">[delete]</a>
+                    <a href="{{action('TaskController@getEditView',[$task->id])}}">[{{Lang::get('app.edit')}}]</a>
+                    <a href="{{action('TaskController@getDeleteView',[$task->id])}}">[{{Lang::get('app.delete')}}]</a>
                 </td>
             </tr>
             @endforeach

@@ -26,6 +26,7 @@
 
 Route::group(['middleware' => ['web']], function () {
     Route::get('/', 'HomeController@index');
+    Route::get('/home', 'HomeController@index');
     Route::get('/contact', 'HomeController@contact');
     Route::post('/message', 'HomeController@createContactMessage');
     
@@ -37,6 +38,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('/task/view/{id}', 'TaskController@viewTask');
     
     Route::get('/solution/file/{id}', 'SolutionController@viewSolutionFile');
+    
+    Route::get('/api/get/file_template',function(){
+        $view = View::make('public.file_template');
+        $file_content = $view->render();
+        return response()->json(['file' => $file_content]);
+    });
     
     Route::auth();
 });

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use Lang;
 use DB;
 use Auth;
 use App;
@@ -129,8 +130,24 @@ class TaskController extends Controller
         if(!$taskFile){
             abort(404);
         }
+        $task = Task::where('id',$taskFile->task_id)
+                ->first();
         
-        return view('task/file',['taskFile' => $taskFile]);
+        if(!$task){
+            abort(404);
+        }
+        
+        $category = Category::where('id',$task->category_id)
+                ->first();
+        
+        
+        if(!$category){
+            abort(500);
+        }
+        
+        return view('task/file',['taskFile' => $taskFile,
+                                 'alias' => $category->alias,
+                                 'script' => $category->script]);
         
     }
     
@@ -145,7 +162,7 @@ class TaskController extends Controller
             'category_id' => 'required|numeric',
             'files.*.name' => 'required|min:2|max:60',
             'files.*.data' => 'required|min:2|max:1000000',
-        ]);
+        ],['files' => 'test']);
         $category = Category::where('id',$request->input('category_id'))->first();
         if(!$category){
             App::abort(406);
@@ -203,7 +220,7 @@ class TaskController extends Controller
         
                
         if($pass){
-            Alert::setSuccessAlert('Your task has saved.');
+            Alert::setSuccessAlert(Lang::get('app.task_saved'));
         }
         else{
             Log::alert(__METHOD__.'('.__FILE__.')', array(
@@ -211,7 +228,7 @@ class TaskController extends Controller
                                   'user_id' => Auth::user()->id,
             ));
              
-            Alert::setErrorAlert('Something bad happend. Your task can be incompile or can\'t be save.');
+            Alert::setErrorAlert(Lang::get('app.unknown_error'));
         }
         
             
@@ -255,7 +272,7 @@ class TaskController extends Controller
         $pass = $task->save();
         
         if($pass){
-            Alert::setSuccessAlert('Your task has been deleted.');
+            Alert::setSuccessAlert(Lang::get('app.deleted_task'));
         }
         else{
             
@@ -264,7 +281,7 @@ class TaskController extends Controller
                                   'user_id' => Auth::user()->id,
             ));
             
-            Alert::setErrorAlert('Unknown error.');
+            Alert::setErrorAlert(Lang::get('app.unknown_error'));
         }
         
         Statistic::SubTask();    
