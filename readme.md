@@ -2,10 +2,6 @@
 
 NuPtr is online repertory. You can add programming tasks and see other people solutions. Build to share code.
 
-## Changelog
-
--
-
 ## Contributing
 
 Feel free to contribute.
