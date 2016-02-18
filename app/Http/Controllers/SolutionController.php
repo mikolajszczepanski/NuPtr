@@ -210,7 +210,7 @@ class SolutionController extends Controller
         }
         
         Statistic::SubSolution();    
-        return redirect()->action('HomeController@index');
+        return redirect()->action('UserController@solutions');
         
     }
 }

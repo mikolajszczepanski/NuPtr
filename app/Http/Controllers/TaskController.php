@@ -285,7 +285,7 @@ class TaskController extends Controller
         }
         
         Statistic::SubTask();    
-        return redirect()->action('HomeController@index');
+        return redirect()->action('UserController@tasks');
         
     }
 }

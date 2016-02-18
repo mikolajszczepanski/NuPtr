@@ -44,7 +44,7 @@
                                 <td>{{$solution->user_name}}</td>
                                 <td>
                                     @foreach ($solution->files as $file)
-                                    <a href="{{action('SolutionController@viewSolutionFile',[$solution->id])}}">{{$file->name}}</a>
+                                    <a href="{{action('SolutionController@viewSolutionFile',[$file->id])}}">{{$file->name}}</a>
                                     @endforeach
                                 </td>
                                 <td>{{$solution->created_at}}</td>

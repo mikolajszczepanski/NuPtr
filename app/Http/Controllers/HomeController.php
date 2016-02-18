@@ -21,7 +21,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $nowDateMinusWeek = date('d-m-Y', strtotime("-1 week")).' 00:00:00';
+        $nowDateMinusWeek = date('Y-m-d', strtotime("-1 week")).' 00:00:00';
         $tasks = Task::where('deleted',false)
                 ->where('created_at','>=',$nowDateMinusWeek)
                 ->orderBy('created_at','desc')
