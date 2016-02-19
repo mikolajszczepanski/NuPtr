@@ -2,14 +2,19 @@
 
 @section('body')
 
-<div class="col-lg-4 col-lg-offset-4">
+<div class="col-lg-12 ">
     <h1 class="httpException">
         <span class="httpException">406</span>
         <br>
-        <small>Not Acceptable</small>
+        <small>Internal Server Error</small>
         <br>
-        <small>Hey what did you type?</small>
+        <br>
+        <small>Unexpected error occured</small>
+        <br>
+        @include('errors.wiki_link')
     </h1>
 </div>
+
+
 
 @endsection

@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use Config;
 use Lang;
 use DB;
 use Auth;
 use App;
 use Log;
+use Cache;
 use App\Task;
 use App\TaskFile;
 use App\Alert;
@@ -24,25 +26,50 @@ use App\Statistic;
 class TaskController extends Controller
 {
 
-    public function index($alias = null,$paginate = 15){
-        
+    public function index(Request $request = null,$alias = null,$paginate = 15){
+        $time_start = microtime(true);
+          
         $tasks = Task::where('deleted',false);
         
         if(!empty($alias) && strlen($alias) >= 1 && strlen($alias) <= 20){
-            $category = Category::where('alias',$alias)->first();
-            if($category){
-                $tasks = $tasks->where('category_id',$category->id);
+            $categories = Category::getAllFromCache();
+            $found_category = null;
+            foreach($categories as $category){
+                if($category->alias == $alias){
+                    $found_category = $category;
+                    break;
+                }
+            }
+            if($found_category){
+                $tasks = $tasks->where('category_id',$found_category->id);
             }
         }
         
-        $tasks = $tasks->orderBy('created_at','desc')
-                       ->paginate($paginate);
+        if(!$alias){
+            $alias = '';
+        }
+        $current_page = !empty($request->input('page')) ? (int) $request->input('page') : 1;
+        
+        $cache_name = __METHOD__.'_alias='.$alias.'paginate='.$paginate.'page='.$current_page;
+        $tasks = Cache::remember(
+                $cache_name,
+                Config::get('constants.CACHE_TIME_DAY'), 
+                function()
+                use ($tasks,$paginate,$cache_name)
+        {
+            if(App::environment('local')) {
+                Log::debug('Cache: '.$cache_name);
+            }
+            return $tasks->orderBy('created_at','desc')
+                   ->paginate($paginate);
+        });
          
         Task::resolveTasksDependencies($tasks);
         
-          
+        $time_end = microtime(true);  
         return view('task/index',['tasks' => $tasks,
-                                  'alias' => $alias]);
+                                  'alias' => $alias,
+                                  'debug_time_of_execution' => ($time_end - $time_start)]);
     }
     
     
@@ -107,8 +134,11 @@ class TaskController extends Controller
         if(!$task){
             abort(404);
         }
-        
-        Task::resolveTaskDependencies($task, $categories);
+         
+        $task->files = TaskFile::where('deleted',false)
+                ->where('task_id',$task_id)
+                ->where('user_id',Auth::user()->id)
+                ->get();
 
         return view('task/create',
                 [
@@ -146,6 +176,7 @@ class TaskController extends Controller
         }
         
         return view('task/file',['taskFile' => $taskFile,
+                                 'task' => $task,
                                  'alias' => $category->alias,
                                  'script' => $category->script]);
         
@@ -189,7 +220,6 @@ class TaskController extends Controller
             Statistic::AddTask();
         }
         
-        
         $task->name = $request->input('name');
         $task->author = $request->input('author');
         $task->description = $request->input('description');
@@ -198,8 +228,8 @@ class TaskController extends Controller
         $filesArray = $request->input('files');
         
         $pass = $task->save();
+        $this->clearCache($task);
         
-      
         if(is_array($filesArray)){
             
             foreach($filesArray as $file){
@@ -271,6 +301,8 @@ class TaskController extends Controller
         
         $pass = $task->save();
         
+        $this->clearCache($task);
+        
         if($pass){
             Alert::setSuccessAlert(Lang::get('app.deleted_task'));
         }
@@ -287,5 +319,13 @@ class TaskController extends Controller
         Statistic::SubTask();    
         return redirect()->action('UserController@tasks');
         
+    }
+    
+    private function clearCache($task){
+        $cache_name = 'App\Task::resolveTaskDependencies_task_id='.$task->id;
+        Cache::forget($cache_name);  
+        if(App::environment('local')) {
+            Log::debug('Clear: '.$cache_name);
+        }
     }
 }

@@ -1,0 +1,1 @@
+<small><a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">List of Http status codes</a></small>

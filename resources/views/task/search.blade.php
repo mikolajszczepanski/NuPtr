@@ -3,8 +3,8 @@
 @section('content')
 <div class="container">
 
-    @if($tasks)
-    <h4>{{Lang::get('app.found')}}: {{count($tasks)}} </h4>
+    @if(!empty($search))
+    <!--<h4>{{Lang::get('app.found')}}: {{count($tasks)}} </h4>-->
     @endif
     
 @include('task.table') 

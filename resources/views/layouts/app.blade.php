@@ -104,6 +104,15 @@
             NuPtr <?php echo date('Y') ?>
         </p>
     </div>
+    @if(!Auth::guest() && Auth::user()->admin && !empty($debug_time_of_execution))
+    <hr>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+        <br>
+        <p class="text-center">
+            Time of script execution: {{$debug_time_of_execution}}s
+        </p>
+    </div>
+    @endif
 </div>
 
 @endsection

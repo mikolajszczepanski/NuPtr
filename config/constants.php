@@ -8,5 +8,6 @@
 
 
 return [
-   
+   'CACHE_TIME_DAY' => '1440',//in minutes
+   'CACHE_TIME_HOUR' => '60',
 ];

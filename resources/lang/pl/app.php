@@ -102,4 +102,7 @@ return [
     'send_reset_link' => 'Wyślij link resetujący hasło',
     
     'reset_email' => 'Kliknij tutaj, aby zresetować hasło:',
+    
+    'home' => 'Strona główna',
+    'solution' => 'Rozwiązanie',
 ];

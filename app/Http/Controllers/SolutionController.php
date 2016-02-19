@@ -11,6 +11,8 @@ use Lang;
 use DB;
 use Auth;
 use Log;
+use Cache;
+use App;
 use App\Category;
 use App\Statistic;
 use App\Solution;
@@ -37,7 +39,12 @@ class SolutionController extends Controller
         if(!$solution){
             abort(404);
         }
-        Solution::resolveSolutionFiles($solution);
+        
+
+        $solution->files = SolutionFile::where('deleted',false)
+                           ->where('solution_id',$solution_id)
+                           ->where('user_id',Auth::user()->id)
+                           ->get();
         
         return view('solution/create',['id' => $solution->task_id,
                                        'solution' => $solution]);
@@ -74,17 +81,19 @@ class SolutionController extends Controller
                     ->where('solution_id',$solution_id)
                     ->where('user_id',$request->user()->id)
                     ->update(array('deleted' => true));
+            
         }
         else{
             $solution_id = null;
             $solution = new Solution();
             Statistic::AddSolution();
         }
-        
+  
         $solution->user_id = $user_id;
         $solution->task_id = $task_id;
         
         $pass = $solution->save();
+        $this->clearCache($solution);
         
         if(is_array($filesArray)){
             
@@ -155,6 +164,8 @@ class SolutionController extends Controller
         }
         
         return view('solution/file',['solutionFile' => $solutionFile,
+                                     'solution' => $solution,
+                                     'task' => $task,
                                      'alias' => $category->alias,
                                      'script' => $category->script]);
         
@@ -195,6 +206,7 @@ class SolutionController extends Controller
         $solution->deleted = true;
         
         $pass = $solution->save();
+        $this->clearCache($solution);
         
         if($pass){
             Alert::setSuccessAlert(Lang::get('app.deleted_solution'));
@@ -212,5 +224,26 @@ class SolutionController extends Controller
         Statistic::SubSolution();    
         return redirect()->action('UserController@solutions');
         
+    }
+    
+    
+    private function clearCache($solution){
+        $cache_name = 'App\Task::resolveTaskDependencies_task_id='.$solution->task_id;
+        Cache::forget($cache_name);
+        if(App::environment('local')) {
+            Log::debug('Clear: '.$cache_name);
+        }
+        
+        $cache_name = 'App\Solution::getTaskSolutionsDependencies_task_id='.$solution->task_id;
+        Cache::forget($cache_name);
+        if(App::environment('local')) {
+            Log::debug('Clear: '.$cache_name);
+        }
+        
+        $cache_name = 'App\Solution::resolveSolutionFiles_solution_id='.$solution->id;
+        Cache::forget($cache_name);
+        if(App::environment('local')) {
+            Log::debug('Clear: '.$cache_name);
+        }
     }
 }

@@ -63,7 +63,12 @@
         @endforeach
     </tbody>
 </table>
+@if(empty($search))
 {!! $tasks->render() !!}
+@else
+{!! $tasks->appends(['s' => $search]) !!}
+@endif
+
 
 <script src="{{ asset('public/js/tasksTable.js') }}"></script>
 @else

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use DB;
+use Cache;
 use Config;
+use App\Category;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
@@ -17,8 +19,7 @@ class CategoryServiceProvider extends ServiceProvider
     public function boot()
     {
         if(Schema::hasTable('categories')){
-            $minutesToRemember = Config::get('constants._HOUR_IN_MINUTES_');
-            $categories = DB::table('categories')->get();
+            $categories = Category::getAllFromCache();
             view()->share('categories', $categories);
         }
     }

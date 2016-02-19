@@ -102,4 +102,7 @@ return [
     'send_reset_link' => 'Send Password Reset Link',
     
     'reset_email' => 'Click here to reset your password:',
+    
+    'home' => 'Home',
+    'solution' => 'Solution',
 ];
