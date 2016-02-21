@@ -53,7 +53,7 @@ class TaskController extends Controller
         $cache_name = __METHOD__.'_alias='.$alias.'paginate='.$paginate.'page='.$current_page;
         $tasks = Cache::remember(
                 $cache_name,
-                Config::get('constants.CACHE_TIME_DAY'), 
+                Config::get('constants.CACHE_TIME_HOUR'), 
                 function()
                 use ($tasks,$paginate,$cache_name)
         {

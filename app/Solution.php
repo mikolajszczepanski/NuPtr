@@ -18,9 +18,8 @@ class Solution extends Model
     
     public static function getTaskSolutionsDependencies($task_id){
         $cache_name = __METHOD__.'_task_id='.$task_id;
-        $solutions = Cache::remember(
+        $solutions = Cache::rememberForever(
                 $cache_name,
-                Config::get('constants.CACHE_TIME_DAY'), 
                 function()
                 use ($task_id,$cache_name)
         {
@@ -45,9 +44,8 @@ class Solution extends Model
     
     public static function getSolutionDependencies($solution_id){
         $cache_name = __METHOD__.'_solution_id='.$solution_id;
-        $solutions = Cache::remember(
+        $solutions = Cache::rememberForever(
                 $cache_name,
-                Config::get('constants.CACHE_TIME_DAY'), 
                 function()
                 use ($solution_id,$cache_name)
         {
@@ -79,9 +77,8 @@ class Solution extends Model
     
     public static function resolveSolutionFiles(&$solution){
         $cache_name = __METHOD__.'_solution_id='.$solution->id;
-        $solution->files = Cache::remember(
+        $solution->files = Cache::rememberForever(
                 $cache_name,
-                Config::get('constants.CACHE_TIME_DAY'), 
                 function()
                 use ($solution,$cache_name)
         {

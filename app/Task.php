@@ -35,9 +35,8 @@ class Task extends Model
         }
         $task->category_name = $categories[$task->category_id - 1]->name;
         $cache_name = __METHOD__.'_task_id='.$task->id;
-        $task->files = Cache::remember(
+        $task->files = Cache::rememberForever(
                 $cache_name,
-                Config::get('constants.CACHE_TIME_DAY'), 
                 function()
                 use ($task,$cache_name)
         {
